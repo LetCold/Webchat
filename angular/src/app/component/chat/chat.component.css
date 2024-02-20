@@ -1,0 +1,25 @@
+.sidebar {
+  background-color: #f8f9fa;
+}
+.main-content {
+  background-color: #ffffff;
+  padding-right: 20px;
+}
+
+.border-right-only {
+  border-right: 1px solid #ccc;
+}
+.width-textarea-80 {
+  width: 80%;
+}
+
+.i-message {
+  background-color: #007bff;
+  color: white;
+}
+
+.you-message {
+  background-color: #ccc;
+  color: white;
+}
+
