@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AccountService } from 'src/app/service/account.service';
 
 @Component({
   selector: 'app-login',
@@ -6,6 +7,31 @@ import { Component } from '@angular/core';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
+
+  FormLogin={
+    email : "",
+    password: ""
+  }
+
+  FormRegister={
+    fullName: "",
+    email: "",
+    gender: 0,
+    password: "",
+    rePassword: ""
+  }
+
+  constructor(private account: AccountService) {}
+
+  login(){
+    this.account.login(this.FormLogin);
+  }
+
+  register(){
+    this.account.register(this.FormRegister);
+  }
+
+
   openRegister() {
     document.getElementById('register')?.classList.add('show', 'active');
     document.getElementById('login-tab')?.classList.remove('active');

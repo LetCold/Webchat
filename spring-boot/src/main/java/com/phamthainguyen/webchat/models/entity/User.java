@@ -48,6 +48,12 @@ public class User implements UserDetails {
 
     private Role role;
 
+    private String imageName;
+
+    private String idFriend;
+
+    private String idRequestFriend;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singleton(new SimpleGrantedAuthority(this.role.getAuthority()));

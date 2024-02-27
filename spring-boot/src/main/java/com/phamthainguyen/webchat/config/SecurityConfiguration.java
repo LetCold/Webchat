@@ -30,15 +30,9 @@ public class SecurityConfiguration implements WebMvcConfigurer {
 
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-                http
-                                .csrf(csrf -> csrf.disable())
+                http.csrf(csrf -> csrf.disable())
                                 .authorizeHttpRequests(auth -> auth
-                                                .requestMatchers("/api/auth/**")
-                                                .permitAll()
-                                                .requestMatchers("/api/user/**")
-                                                .permitAll()
-                                                .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                                                .requestMatchers("/static/**")
+                                                .requestMatchers("/**")
                                                 .permitAll()
                                                 .anyRequest()
                                                 .authenticated())
@@ -62,7 +56,7 @@ public class SecurityConfiguration implements WebMvcConfigurer {
         }
 
         @Override
-        public void addResourceHandlers( ResourceHandlerRegistry registry) {
+        public void addResourceHandlers(ResourceHandlerRegistry registry) {
                 registry
                                 .addResourceHandler("/static/**")
                                 .addResourceLocations("classpath:/static/")

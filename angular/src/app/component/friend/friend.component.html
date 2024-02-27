@@ -7,20 +7,23 @@
         <h4>Danh sách bạn</h4>
         <div class="card">
           <div class="card-body" style="min-height: 85vh;max-height: 85vh; overflow-y: auto">
-            <div class="card mt-4 shadow">
+            <div *ngIf="friends.length === 0">
+              <h3 class="text-center">-- Danh sách trống --</h3>
+            </div>
+            <div class="card mt-3 shadow" *ngFor="let friend of friends">
               <div class="card-body d-flex justify-content-between">
-                <div class="d-flex">
-                  <img src="https://robohash.org/avatar.png?size=75x75" class="rounded-circle img-fluid" />
-                  <div>
-                    <p class="card-title">Phạm Let</p>
-                    <p class="card-text">Củ cải nè</p>
-                  </div>
+                <div class="d-flex justify-content-center align-items-center">
+                  <img [src]="'http://localhost:8080/static/images/'+friend.imageName" class="rounded-circle img-fluid"
+                    width="50px" />
+                  <h4 class="card-title">{{friend.name}}</h4>
                 </div>
-                <button class="btn text-white" style="background-color: red">
+                <button class="btn text-white" style="background-color: red" (click)="deleteFriend(friend.id)">
                   Xóa kết bạn
                 </button>
               </div>
             </div>
+
+
           </div>
         </div>
 
@@ -29,33 +32,79 @@
     </div>
     <!-- Phần phải -->
     <div class="col-md-6">
-      <div class="col-md-12">
-        <h4 class="mt-2 mb-3">Tìm kiếm</h4>
-        <div>
-          <div class="form-group mt-3">
-            <input class="form-control" placeholder="Sđt" />
-          </div>
-        </div>
-        <div class="card mt-2">
-          <div class="card-body" style="min-height:79vh; max-height: 79vh; overflow-y: auto">
-            <div class="card mt-4 shadow">
-              <div class="card-body d-flex justify-content-between">
-                <div class="d-flex">
-                  <img src="https://robohash.org/avatar.png?size=75x75" class="rounded-circle img-fluid" />
-                  <div>
-                    <p class="card-title">Phạm Let</p>
-                    <p class="card-text">Củ cải nè</p>
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link active text-black" id="requestFriend" (click)="onRequestFriend() " style="cursor: pointer;">Lời mời kết bạn</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-black" id="findFriend" (click)="onFindFriend()" style="cursor: pointer;">Tìm bạn</a>
+        </li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane fade show active" id="requestFriendTab">
+          <div class="col-md-12">
+            <div class="card mt-2">
+
+              <div class="card-body" style="min-height:85vh; max-height: 85vh; overflow-y: auto">
+                <div *ngIf="requestFriend.length === 0">
+                  <h3 class="text-center">-- Danh sách trống --</h3>
+                </div>
+
+                <div class="card mt-3 shadow" *ngFor="let friend of requestFriend">
+                  <div class="card-body d-flex justify-content-between">
+                    <div class="d-flex justify-content-center align-items-center">
+                      <img [src]="'http://localhost:8080/static/images/'+friend.imageName"
+                        class="rounded-circle img-fluid" width="50px" />
+                      <h4 class="card-title">{{friend.name}}</h4>
+                    </div>
+                    <button class="btn btn-primary " (click)="submitRequestFriend(friend.id)">Chấp nhận kết bạn</button>
                   </div>
                 </div>
-                <button class="btn btn-primary">Kết bạn</button>
+
               </div>
+
+
+
             </div>
-            <!-- Thêm nội dung khác nếu cần -->
           </div>
         </div>
-      </div>
-    </div>
+        <div class="tab-pane fade " id="findFriendTab">
+          <div class="col-md-12">
+            <h4 class="mt-2 mb-3">Tìm kiếm</h4>
+            <div>
+              <div class="form-group mt-3 d-flex">
+                <input class="form-control" style="max-width: 30vh;" placeholder="Email" [(ngModel)]="findEmail"/>
+                <button class="btn btn-primary ms-2" (click)="findSubmit()">Tìm kiếm</button>
+              </div>
+            </div>
+            <div class="card mt-2">
 
+
+
+              <div class="card-body" style="min-height:75.5vh; max-height: 75.5vh; overflow-y: auto">
+                <div *ngIf="findFriend.length ===0">
+                  <h3 class="text-center mt-2">-- Danh sách trống --</h3>
+                </div>
+                <div class="card mt-3 shadow" *ngFor="let friend of findFriend">
+                  <div class="card-body d-flex justify-content-between">
+                    <div class="d-flex justify-content-center align-items-center">
+                      <img [src]="'http://localhost:8080/static/images/'+friend.imageName"
+                        class="rounded-circle img-fluid" width="50px" />
+                      <h4 class="card-title">{{friend.name}}</h4>
+                    </div>
+                    <button class="btn btn-primary " (click)="addFriend(friend.id)">Kết bạn</button>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
   </div>
   <hr>
 </div>

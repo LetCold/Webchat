@@ -2,3 +2,21 @@
 body{
 background-color: whitesmoke;
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.thumbnail {
+  position: relative;
+  width: 75px;
+  height: 75px;
+  overflow: hidden;
+}
+
+.thumbnail img {
+  width: auto;
+  height: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

@@ -4,13 +4,9 @@
       <div class="card">
         <div class="card-body">
           <div class="text-center">
-            <img
-              class="mb-3"
-              src="https://robohash.org/avatar.png"
-              alt="Avatar"
-            />
-            <h2 class="name">Phạm Let</h2>
-            <p class="email">tihl987456@email.com</p>
+            <img class="mb-3" id="avatar" [src]="'http://localhost:8080/static/images/'+dataProfile.image" alt="Avatar" width="120px"height="120px"/>
+            <h2 class="name">{{dataProfile.name}}</h2>
+            <p class="email">{{dataProfile.email}}</p>
           </div>
         </div>
       </div>
@@ -18,17 +14,13 @@
       <div class="card mt-2 d-none" id="edit-info">
         <div class="card-body">
           <div class="form-group">
+            <label for="fileUpload">Tải ảnh avatar lên</label>
+            <input class="form-control" type="file" id="fileUpload" name="fileUpload" accept=".png, .jpg" onchange="onChange(event)">
             <span>Tên Người dùng</span>
-            <input class="form-control" type="text" placeholder="tên" />
-            <span>Email</span>
-            <input class="form-control" type="text" placeholder="email" />
+            <input class="form-control" type="text" placeholder="tên" [(ngModel)]="dataProfile.name"/>
             <div class="mt-2 text-center">
-              <button class="btn btn-primary">Thay đổi thông tin</button>
-              <button
-                class="btn ms-2 text-white"
-                style="background-color: red"
-                (click)="editInfo()"
-              >
+              <button class="btn btn-primary" (click)="editInfo()">Thay đổi thông tin</button>
+              <button class="btn ms-2 text-white" style="background-color: red" (click)="openFormEdit()">
                 Hủy bỏ
               </button>
             </div>
@@ -39,16 +31,10 @@
       <div class="card mt-2">
         <div class="card-body">
           <div class="text-center">
-            <a href="/home"> <button
-              class="btn btn-primary"
-            >
-              Quay lại
-            </button></a>
-            <button
-              class="btn ms-2 btn-primary"
-              id="btn-edit-info"
-              (click)="editInfo()"
-            >
+            <a href="/home"> <button class="btn btn-primary">
+                Quay lại
+              </button></a>
+            <button class="btn ms-2 btn-primary" id="btn-edit-info" (click)="openFormEdit()">
               Thay đổi thông tin
             </button>
             <button class="btn ms-2 text-white" style="background-color: red" (click)="logout()">

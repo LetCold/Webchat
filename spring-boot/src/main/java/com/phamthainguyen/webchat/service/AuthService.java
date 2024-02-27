@@ -3,6 +3,8 @@ package com.phamthainguyen.webchat.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,40 +30,63 @@ public class AuthService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public boolean isEmail(String email) {
-        return userResponsitory.findByEmail(email) != null;
+    public User getUserByEmail(String email) {
+        return userResponsitory.findByEmail(email).orElse(null);
     }
 
     public AuthResponse login(LoginRequest request) {
-        System.out.println("password " +request.getPassword());
-        try{
-        authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        }catch(Exception e){
+        try {
+            authenticationManager
+                    .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+        } catch (Exception e) {
             return AuthResponse.builder().type("Account").msg("Lỗi đăng nhập").build();
         }
-        if (!isEmail(request.getEmail())) {
+        User user = getUserByEmail(request.getEmail());
+        if (user == null) {
             return AuthResponse.builder().type("email").msg("Email does not exist").build();
         }
-        User user = userResponsitory.findByEmail(request.getEmail());
         String token = jwtService.generateToken(user);
-        return AuthResponse.builder().type("login").msg("success").token(token).build();
+        return AuthResponse.builder().type("login").msg("success").token(token).fullname(user.getFullName()).build();
     }
 
     public AuthResponse register(RegisterRequest request) {
-        if (isEmail(request.getEmail())) {
-            return AuthResponse.builder().type("email").msg("Email already exists").build();
+        if (userResponsitory.existsByEmail(request.getEmail())) {
+            return AuthResponse.builder().type("Email").msg("Email already exists").build();
+        }
+        if (request.getPassword().equals(request.getRePassword())) {
+            return AuthResponse.builder().type("Password").msg("Passwords do not match").build();
         }
         User user = User.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .fullName(request.getFullName())
                 .gender(request.getGender())
+                .idFriend("[]")
+                .idRequestFriend("[]")
                 .role(Role.USER)
                 .build();
         userResponsitory.save(user);
         String token = jwtService.generateToken(user);
-        return AuthResponse.builder().type("login").msg("success").token(token).build();
+        return AuthResponse.builder().type("login").msg("success").token(token).fullname(user.getFullName()).build();
+    }
+
+    public User getUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() != null
+                && authentication.getPrincipal() instanceof User) {
+            User user = (User) authentication.getPrincipal();
+            return user;
+        }
+        return null;
+    }
+
+    public User getUserByToken(String jwt) {
+        String userEmail = jwtService.extractEmail(jwt);
+        if (userEmail != null) {
+            User user = userResponsitory.findByEmail(userEmail).orElse(null);
+            return user;
+        }
+        return null;
     }
 
 }
